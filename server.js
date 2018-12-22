@@ -1,6 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-
+const bodyParser = require("body-parser");
 const users = require("./routes/api/users");
 const profile = require("./routes/api/profile");
 const posts = require("./routes/api/posts");
@@ -15,6 +15,10 @@ mongoose
   .connect(db)
   .then(() => console.log("Mongo DB connected"))
   .catch(err => console.log(err), { useNewUrlParser: true });
+
+//body parser middleware
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 //Use Routes
 app.use("/api/users", users);
