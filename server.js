@@ -16,19 +16,12 @@ mongoose
   .then(() => console.log("Mongo DB connected"))
   .catch(err => console.log(err), { useNewUrlParser: true });
 
-app.get("*", function(req, res) {
-  console.log(req);
-
-  res.send("hello World!");
-});
-
 //Use Routes
 app.use("/api/users", users);
 app.use("/api/posts", posts);
 app.use("/api/profile", profile);
 
 app.get("/", function(req, res) {
-  console.log(req);
   res.send("Hello World6!");
 });
 
