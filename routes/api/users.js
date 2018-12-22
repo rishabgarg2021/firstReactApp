@@ -47,4 +47,25 @@ router.post("/register", (req, res) =>
   })
 );
 
+router.post("/login", (req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
+  User.findOne({ email }).then(user => {
+    //check for user
+    if (!user) {
+      return res.status(404).json({
+        email: "Email not registered"
+      });
+    }
+    //check password
+    bcrypt.compare(password, user.password).then(isMatch => {
+      if (isMatch) {
+        res.json({ msg: "Success" });
+      } else {
+        res.status(400).json({ password: "Incorrect password" });
+      }
+    });
+  });
+});
+
 module.exports = router;
