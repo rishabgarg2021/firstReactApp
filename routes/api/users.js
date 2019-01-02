@@ -4,6 +4,11 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const keys = require("../../config/keys");
 const passport = require("passport");
+
+//Load Input Validation
+const validateRegisterInput = require("../../validator/register");
+const validateLoginInput = require("../../validator/login");
+
 // Load User model
 
 const User = require("../../models/User");
@@ -19,7 +24,14 @@ router.get("/test", (req, res) =>
 
 //@ route GET api/users/register
 // @access  Public
-router.post("/register", (req, res) =>
+router.post("/register", (req, res) => {
+  const { errors, isValid } = validateRegisterInput(req.body);
+
+  //check validation
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+
   User.findOne({ email: req.body.email }).then(user => {
     if (user) {
       return res.status(400).json({ email: "Email already exists" });
@@ -47,18 +59,22 @@ router.post("/register", (req, res) =>
         });
       });
     }
-  })
-);
+  });
+});
 
 router.post("/login", (req, res) => {
+  const { errors, isValid } = validateLoginInput(req.body);
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+
   const email = req.body.email;
   const password = req.body.password;
   User.findOne({ email }).then(user => {
     //check for user
     if (!user) {
-      return res.status(404).json({
-        email: "Email not registered"
-      });
+      errors.email = "Email Not registered";
+      return res.status(404).json(errors);
     }
     //check password
     bcrypt.compare(password, user.password).then(isMatch => {
@@ -87,7 +103,8 @@ router.post("/login", (req, res) => {
 
         // res.json({ msg: "Success" });
       } else {
-        res.status(400).json({ password: "Incorrect password" });
+        errors.password = "Incorrect Password";
+        res.status(400).json(errors);
       }
     });
   });
