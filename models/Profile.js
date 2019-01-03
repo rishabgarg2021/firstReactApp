@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const profileSchema = new Schema({
   user: {
     type: Schema.ObjectId,
-    ref: "users"
+    ref: "User"
   },
   handle: {
     type: String,
@@ -12,6 +12,9 @@ const profileSchema = new Schema({
     max: 40
   },
   company: {
+    type: String
+  },
+  website: {
     type: String
   },
   location: {
@@ -26,8 +29,7 @@ const profileSchema = new Schema({
     required: true
   },
   bio: {
-    type: String,
-    required: true
+    type: String
   },
   githubusername: {
     type: String
@@ -43,8 +45,7 @@ const profileSchema = new Schema({
         required: true
       },
       location: {
-        type: String,
-        required: true
+        type: String
       },
       from: {
         type: Date,
@@ -72,13 +73,12 @@ const profileSchema = new Schema({
         type: String,
         required: true
       },
-      fieldOfStudy: {
+      fieldofstudy: {
         type: String,
         required: true
       },
       location: {
-        type: String,
-        required: true
+        type: String
       },
       from: {
         type: Date,
@@ -107,6 +107,9 @@ const profileSchema = new Schema({
       type: String
     },
     linkedin: {
+      type: String
+    },
+    instagram: {
       type: String
     }
   }
